@@ -1,0 +1,113 @@
+<?php
+session_start();
+if (isset($_SESSION['user_id'])) {
+    if ($_SESSION['role'] == 'admin') {
+        header("Location: admin.php");
+    } else {
+        header("Location: welcome.php");
+    }
+    exit();
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profit Pulse</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container mt-5" style="max-width: 49%;">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-lg" style="border-radius: 30px;">
+                    <div class="card-header bg-gradient-primary text-white text-center" style="border-radius: 30px 30px 0 0;">
+                        <img src="p.png" alt="Profit Pulse Logo" style="height: 86px; margin-bottom: 10px;">
+                        <h3 class="mb-0"><i class="fas fa-chart-line"></i> Welcome to Profit Pulse</h3>
+                        <p class="mb-0">Maximize your profits with our subscription plans</p>
+                    </div>
+                    <div class="card-body p-4">
+                        <ul class="nav nav-pills nav-fill mb-4" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="login-tab" data-bs-toggle="pill" data-bs-target="#login" type="button" role="tab" aria-controls="login" aria-selected="true">
+                                    <i class="fas fa-sign-in-alt"></i> Login
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="register-tab" data-bs-toggle="pill" data-bs-target="#register" type="button" role="tab" aria-controls="register" aria-selected="false">
+                                    <i class="fas fa-user-plus"></i> Register
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <!-- Login Tab -->
+                            <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
+                                <form action="login.php" method="POST">
+                                    <div class="mb-3">
+                                        <label for="loginUsername" class="form-label"><i class="fas fa-user"></i> Username</label>
+                                        <input type="text" class="form-control" id="loginUsername" name="username" required placeholder="Enter your username">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="loginPassword" class="form-label"><i class="fas fa-lock"></i> Password</label>
+                                        <input type="password" class="form-control" id="loginPassword" name="password" required placeholder="Enter your password">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100"><i class="fas fa-sign-in-alt"></i> Login</button>
+                                </form>
+                            </div>
+                            <!-- Register Tab -->
+                            <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
+                                <form action="register.php" method="POST">
+                                    <div class="mb-3">
+                                        <label for="registerUsername" class="form-label"><i class="fas fa-user"></i> Username</label>
+                                        <input type="text" class="form-control" id="registerUsername" name="username" required placeholder="Choose a username">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="registerPhone" class="form-label"><i class="fas fa-phone"></i> Phone Number (with country code)</label>
+                                        <input type="text" class="form-control" id="registerPhone" name="phone" required placeholder="+1234567890">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="registerPassword" class="form-label"><i class="fas fa-lock"></i> Password</label>
+                                        <input type="password" class="form-control" id="registerPassword" name="password" required placeholder="Create a password">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="registerConfirmPassword" class="form-label"><i class="fas fa-lock"></i> Confirm Password</label>
+                                        <input type="password" class="form-control" id="registerConfirmPassword" name="confirm_password" required placeholder="Confirm your password">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="registerReferral" class="form-label"><i class="fas fa-users"></i> Referral Code (Mandatory)</label>
+                                        <input type="text" class="form-control" id="registerReferral" name="referral_code" required placeholder="Enter referral code">
+                                        <?php if (isset($_GET['ref'])): ?>
+                                            <small class="form-text text-muted">Referral code pre-filled from link.</small>
+                                            <script>document.getElementById('registerReferral').value = '<?php echo htmlspecialchars($_GET['ref']); ?>';</script>
+                                        <?php endif; ?>
+                                    </div>
+                                    <?php
+                                    if (isset($_SESSION['errors'])) {
+                                        echo '<div class="alert alert-danger">';
+                                        foreach ($_SESSION['errors'] as $error) {
+                                            echo '<p>' . htmlspecialchars($error) . '</p>';
+                                        }
+                                        echo '</div>';
+                                        unset($_SESSION['errors']);
+                                    }
+                                    if (isset($_SESSION['success'])) {
+                                        echo '<div class="alert alert-success">' . htmlspecialchars($_SESSION['success']) . '</div>';
+                                        unset($_SESSION['success']);
+                                    }
+                                    ?>
+                                    <button type="submit" class="btn btn-success w-100"><i class="fas fa-user-plus"></i> Register</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

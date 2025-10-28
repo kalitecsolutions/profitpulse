@@ -1,0 +1,31 @@
+Options -Indexes
+
+# Enable URL rewriting
+RewriteEngine On
+
+# If the request is not a file and not a directory, and a .php version exists, append .php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)$ $1.php [L]
+
+# Deny direct access to sensitive configuration and database files
+<Files "config.php">
+Order Allow,Deny
+Deny from all
+</Files>
+
+<Files "db.php">
+Order Allow,Deny
+Deny from all
+</Files>
+
+<Files "generate_hash.php">
+Order Allow,Deny
+Deny from all
+</Files>
+
+<Files "test_password.php">
+Order Allow,Deny
+Deny from all
+</Files>
